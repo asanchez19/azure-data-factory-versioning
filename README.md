@@ -15,16 +15,8 @@ The goal of this spike is to establish a Git-based development workflow for Azur
 
 ### Repository Strategy
 
-**Option A - Dedicated Azure Repos repo for ADF (Recommended)**
-- ADF code lives only in Azure Repos
-- Bitbucket stays for app code; no mirroring of ADF JSON back to Bitbucket
-- Pros: Simple, matches ADF support, no sync complexity
-- Cons: ADF artifacts not co-located with app code
-
-**Option B - Mirrored model (Higher complexity)**
-- Main repo in Azure Repos/GitHub, mirrored to Bitbucket
-- Requires automation (pipelines or webhooks) to sync repos
-- Clear rule: no one commits ADF JSON directly to Bitbucket
+**Option A - Dedicated Github repo for ADF (Recommended)**
+- ADF code lives only in Github
 
 ### Branching Strategy
 
