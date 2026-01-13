@@ -59,7 +59,7 @@ jobs:
           enable-AzPSSession: true
           
       - name: Data Factory Deploy
-        uses: Azure/data-factory-deploy-action@v1.2.0
+        uses: Azure/data-factory-deploy-action@v1.2.2
         with:
           resourceGroupName: ${{ vars.TARGET_RESOURCE_GROUP_NAME_STG }}
           dataFactoryName: ${{ vars.TARGET_DATA_FACTORY_NAME_STG }}
