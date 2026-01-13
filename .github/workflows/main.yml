@@ -14,7 +14,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
         with:
-          node-version: 22.x
+          node-version: 20.x
 
       - name: Install ADF Utilities package
         run: npm install
