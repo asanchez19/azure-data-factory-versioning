@@ -62,4 +62,6 @@ jobs:
           dataFactoryName: ${{ vars.TARGET_DATA_FACTORY_NAME_STG }}
           armTemplateFile: ARMTemplateForFactory.json
           armTemplateParametersFile: ARMTemplateParametersForFactory.json
-          additionalParameters: factoryName=${{ vars.TARGET_DATA_FACTORY_NAME_STG }}
+          additionalParameters: >-
+            factoryName=${{ vars.TARGET_DATA_FACTORY_NAME_STG }}
+            AzureDataLakeStorageService_properties_typeProperties_url=https://${{ vars.STORAGE_ACCOUNT_STG }}.dfs.core.windows.net/
