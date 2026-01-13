@@ -54,7 +54,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "ADLS",
+						"referenceName": "DelimitedText1",
 						"type": "DatasetReference"
 					}
 				]
