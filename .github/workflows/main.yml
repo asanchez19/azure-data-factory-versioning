@@ -1,0 +1,68 @@
+on:
+  push:
+    branches:
+    - master
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v3.4.1
+      with:
+        node-version: 18.x
+        
+    - name: Install ADF Utilities package
+      run: npm install
+      working-directory: ${{github.workspace}}/build
+    
+    # Build the resource ID dynamically from secrets/variables
+    - name: Validate
+      run: |
+        RESOURCE_ID="/subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/resourceGroups/${{ vars.RESOURCE_GROUP_NAME }}/providers/Microsoft.DataFactory/factories/${{ vars.DATA_FACTORY_NAME }}"
+        npm run build validate ${{github.workspace}}/ $RESOURCE_ID
+      working-directory: ${{github.workspace}}/build
+ 
+    - name: Validate and Generate ARM template
+      run: |
+        RESOURCE_ID="/subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/resourceGroups/${{ vars.RESOURCE_GROUP_NAME_DEV }}/providers/Microsoft.DataFactory/factories/${{ vars.DATA_FACTORY_NAME_DEV }}"
+        npm run build export ${{github.workspace}}/ $RESOURCE_ID "ExportedArmTemplate"
+      working-directory: ${{github.workspace}}/build
+ 
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ExportedArmTemplate
+        path: ${{github.workspace}}/build/ExportedArmTemplate
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download a Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ExportedArmTemplate
+          
+      - name: Login via Az module
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          enable-AzPSSession: true
+          
+      - name: Data Factory Deploy
+        uses: Azure/data-factory-deploy-action@v1.2.0
+        with:
+          resourceGroupName: ${{ vars.TARGET_RESOURCE_GROUP_NAME_STG }}
+          dataFactoryName: ${{ vars.TARGET_DATA_FACTORY_NAME_STG }}
+          armTemplateFile: ARMTemplateForFactory.json
+          armTemplateParametersFile: ARMTemplateParametersForFactory.json
+          additionalParameters: factoryName=${{ vars.TARGET_DATA_FACTORY_NAME_STG }}
