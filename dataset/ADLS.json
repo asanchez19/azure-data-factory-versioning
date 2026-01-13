@@ -1,6 +1,10 @@
 {
 	"name": "ADLS",
 	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorageService",
+			"type": "LinkedServiceReference"
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
