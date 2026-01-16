@@ -1,0 +1,12 @@
+{
+	"name": "TeamsHttpServer",
+	"properties": {
+		"annotations": [],
+		"type": "HttpServer",
+		"typeProperties": {
+			"url": "https://github.com/darshilparmar/tokyo-olympic-azure-data-engineering-project/raw/refs/heads/main/data/Teams.csv",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "Anonymous"
+		}
+	}
+}
